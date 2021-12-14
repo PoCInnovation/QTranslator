@@ -1,6 +1,6 @@
 import sys
 from simulator import simulator
-from add_circuit import AddCircuit
+from circuits.add_circuit import AddCircuit
 
 if len(sys.argv) < 4 or len(sys.argv) > 5:
     print("Please provide an operation and two numbers as argument")
