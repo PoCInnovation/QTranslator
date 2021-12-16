@@ -1,0 +1,36 @@
+name: Action
+
+on:
+  push:
+    branches: ["main", "master", "develop"]
+  pull_request:
+    branches: ["main", "master", "develop"]
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+    build:
+        strategy:
+            fail-fast: false
+            matrix:
+              os: [ubuntu-latest, macos-latest]
+              build_type: [Debug, Release]
+
+        name: CI
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+
+            - name: Install Required Dependencies on Ubuntu
+              if: ${{ matrix.os == 'ubuntu-latest' }}
+              run: |
+                sudo apt update
+                sudo apt install -y g++-11
+                sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 60 --slave /usr/bin/g++ g++ /usr/bin/g++-11
+
+            - name: Build Project
+              run: make

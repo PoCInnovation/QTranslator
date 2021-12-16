@@ -1,1 +1,25 @@
-**/__pycache__
+# Editor Files and Folders
+
+.idea/
+.vscode/
+.DS_Store
+*~
+\#*#
+
+# Build Files and Binaries
+
+QTranslator
+*.qasm
+*.log
+*.o
+*.so
+*.dll
+*.dylib
+*build/
+*cmake-build-*/
+*__pycache__/
+
+# Documentation Generation Files
+
+doc/latex/
+doc/html/
