@@ -35,6 +35,14 @@ sub i 5
 add i j
 ```
 
+## Build and run unit tests
+
+To build the tests, execute the following command :  
+```make tests```
+
+After that, you will be able to run them using the following command :  
+```./QTranslatorTests```
+
 ## Build Tips
 
 If you want to remove all objects files :  
