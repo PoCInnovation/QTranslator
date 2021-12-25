@@ -34,3 +34,9 @@ jobs:
 
             - name: Build Project
               run: make
+
+            - name: Build Tests
+              run: make tests
+
+            - name: Run Tests
+              run: ./QTranslatorTests
