@@ -3,12 +3,12 @@
 #include "format.hpp"
 #include "exception.hpp"
 
-int main(int ac, char **av)
+int main(int ac, char const *av[])
 {
     try {
         qtranslator app(ac, av);
         return EXIT_SUCCESS;
-    } catch (const compiler::exception &e) {
+    } catch (const transpiler::exception &e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
     } catch (const std::exception &e) {

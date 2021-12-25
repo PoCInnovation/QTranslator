@@ -9,6 +9,7 @@
 # Build Files and Binaries
 
 QTranslator
+QTranslatorTests
 *.qasm
 *.log
 *.o
@@ -16,6 +17,7 @@ QTranslator
 *.dll
 *.dylib
 *build/
+*build_tests/
 *cmake-build-*/
 *__pycache__/
 
