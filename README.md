@@ -1,4 +1,4 @@
-# Synesthesia
+# QTranslator
 
 ## Desciption
 Transforms an .io file into QASM. The goal is to create a quantum calculator.
