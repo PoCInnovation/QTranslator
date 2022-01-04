@@ -6,8 +6,9 @@ int j 10
 char c 42
 
                 # operations
-print i
+add i 10
+add i 10
 
-add i 5
-sub i 5
-add i j
+print i
+#sub i 5
+#add i j

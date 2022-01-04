@@ -60,16 +60,31 @@ void operation_parser(const std::vector<std::string> &line)
     }
 }
 
+int exec(std::string cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+    return std::stoi(result);
+}
+
 std::string operation_add(const std::vector<std::string> &line)
 {
     operation_parser(line);
-    std::string &variable_value = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const string_pair &pair) {
-        return pair.second == line[1];
-    })->first;
+    auto it = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
+        return pair.first == line[1];
+    });
+    if (it != std::end(symbol_table)) {
 
-    int result = system((std::string("python ./calculator/calculator.py ADD ") + variable_value + " " + line[2]).c_str());
+        int result = exec((std::string("python ./calculator/calculator.py ADD ") + std::to_string(it->second.value) + " " + line[2] + " ibm"));
 
-    variable_value = std::to_string(std::stoi(variable_value) + result);
+        it->second.value = result;
+    }
 
     return "";
 }
@@ -77,24 +92,28 @@ std::string operation_add(const std::vector<std::string> &line)
 std::string operation_sub(const std::vector<std::string> &line)
 {
     operation_parser(line);
-    std::string &variable_value = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const string_pair &pair) {
-        return pair.second == line[1];
-    })->first;
+    auto it = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
+        return pair.first == line[1];
+    });
+    if (it != std::end(symbol_table)) {
 
-    int result = system((std::string("python ./calculator/calculator.py SUB ") + variable_value + " " + line[2]).c_str());
+        int result = exec((std::string("python ./calculator/calculator.py SUB ") + std::to_string(it->second.value) + " " + line[2] + " ibm").c_str());
 
-    variable_value = std::to_string(std::stoi(variable_value) + result);
+        it->second.value = result;
+    }
 
     return "";
 }
 
 std::string operation_print(const std::vector<std::string> &line)
 {
-    std::string variable_value = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const string_pair &pair) {
-        return pair.second == line[1];
-    })->second;
+    auto it = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
+        return pair.first == line[1];
+    });
+    if (it != std::end(symbol_table)) {
+        std::cout << it->second.value << std::endl;
+    }
 
-    std::cout << variable_value << std::endl;
     return "";
 }
 }

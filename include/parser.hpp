@@ -30,7 +30,7 @@ const std::map<std::string, std::function<std::string(const std::vector<std::str
     {"char", create_variable},
     {"int", create_variable},
     {"add", operation_add},
+    {"print", operation_print},
     {"sub", operation_sub},
-    {"print", operation_print}
 };
 }
