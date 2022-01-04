@@ -2,8 +2,8 @@ from qiskit import IBMQ
 import qiskit
 import sys
 
-    IBMQ.save_account("IBM_TOKEN")
 def ibm_exec(circuit, number_measurement=1):
+    IBMQ.save_account("IBM TOKEN", overwrite=True)
 
     provider = IBMQ.load_account()
     backend = provider.get_backend("ibmq_qasm_simulator")
