@@ -10,13 +10,13 @@ Transforms an .io file into QASM. The goal is to create a quantum calculator.
     - [:rocket: Clone repository](#rocket-clone-repository)
     - [:warning: Requirement](#warning-requirement)
   - [:writing_hand: How to write .io](#writing_hand-how-to-write-io)
-    - [Example](#example)
+    - [:clipboard: Example](#clipboard-example)
   - [:checkered_flag: Quick-Start](#checkered_flag-quick-start)
-  - [More informations](#more-informations)
-    - [Manual](#manual)
-    - [Build and run unit tests](#build-and-run-unit-tests)
-    - [Build Tips](#build-tips)
-  - [Authors](#authors)
+  - [:information_source: More informations](#information_source-more-informations)
+    - [:ledger: Manual](#ledger-manual)
+    - [:white_check_mark: Build and run unit tests](#white_check_mark-build-and-run-unit-tests)
+    - [:bulb: Build Tips](#bulb-build-tips)
+  - [:bust_in_silhouette: Authors](#bust_in_silhouette-authors)
   
 ## Install
 
@@ -32,7 +32,7 @@ git@github.com:PoCInnovation/QTranslator.git
 - [C++20](https://en.cppreference.com/w/cpp/20)
 
 ## :writing_hand: How to write .io
-### Example
+### :clipboard: Example
 Create a file create **operations.io**.  
 The custom language must follow this pattern:  
 ```python
@@ -53,8 +53,8 @@ make
 ./QTranslator operations.io
 ```
 
-## More informations
-### Manual
+## :information_source: More informations
+### :ledger: Manual
 
 ```
 USAGE:
@@ -72,7 +72,7 @@ RETURN VALUE:
 ```
 
 
-### Build and run unit tests
+### :white_check_mark: Build and run unit tests
 
 To build the tests, execute the following command :  
 ```make tests```
@@ -80,12 +80,12 @@ To build the tests, execute the following command :
 After that, you will be able to run them using the following command :  
 ```./QTranslatorTests```
 
-### Build Tips
+### :bulb: Build Tips
 
 If you want to remove all objects files :  
 `make clean`  
 
-## Authors
+## :bust_in_silhouette: Authors
 
 | [<img src="https://github.com/tocola.png?size=85" width=85><br><sub>Martin OLIVIER</sub>](https://github.com/tocola) | [<img src="https://github.com/jeanbaptistedebize.png?size=85" width=85><br><sub>Jean-Baptiste DEBIZE</sub>](https://github.com/jeanbaptistedebize) | [<img src="https://github.com/Tfourcat.png?size=85" width=85><br><sub>Théo FOURCAt</sub>](https://github.com/Tfourcat)
 | :---: | :---: | :---: |
