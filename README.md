@@ -12,9 +12,9 @@ Transforms an .io file into QASM. The goal is to create a quantum calculator.
   - [:writing_hand: How to write .io](#writing_hand-how-to-write-io)
     - [Example](#example)
   - [:checkered_flag: Quick-Start](#checkered_flag-quick-start)
-  - [More informations](#more-informations)
+  - [:information_source: More informations](#more-informations)
     - [:ledger: Manual](#manual)
-    - [:white_check_mark: Build and run unit tests](#build-and-run-unit-tests)
+    - [:white_check_mark: Build and run unit tests](#white_check_mark-build-and-run-unit-tests)
     - [:bulb: Build Tips](#build-tips)
   - [Authors](#authors)
   
@@ -53,7 +53,7 @@ make
 ./QTranslator operations.io
 ```
 
-## More informations
+## :information_source: More informations
 ### :ledger: Manual
 
 ```
