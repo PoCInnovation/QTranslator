@@ -9,4 +9,4 @@ char c 42
 
 add i 5
 sub i 5
-add i j
+# add i j
