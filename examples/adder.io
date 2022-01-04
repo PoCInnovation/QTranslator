@@ -6,6 +6,7 @@ int j 10
 char c 42
 
                 # operations
+print i
 
 add i 5
 sub i 5

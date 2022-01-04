@@ -13,6 +13,7 @@ namespace parser {
 std::string create_variable(const std::vector<std::string> &line);
 std::string operation_add(const std::vector<std::string> &line);
 std::string operation_sub(const std::vector<std::string> &line);
+std::string operation_print(const std::vector<std::string> &line);
 
 /**
  *  Associative table that gives the size of a type as a string from a type as a string
@@ -29,6 +30,7 @@ const std::map<std::string, std::function<std::string(const std::vector<std::str
     {"char", create_variable},
     {"int", create_variable},
     {"add", operation_add},
-    {"sub", operation_sub}
+    {"sub", operation_sub},
+    {"print", operation_print}
 };
 }

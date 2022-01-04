@@ -1,5 +1,12 @@
 #include "parser.hpp"
+#include <iostream>
+#include <ostream>
 #include "exception.hpp"
+#include <cstdio>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
 
 namespace parser {
 
@@ -50,12 +57,38 @@ void operation_parser(const std::vector<std::string> &line)
 std::string operation_add(const std::vector<std::string> &line)
 {
     operation_parser(line);
-    return "add;";
+    std::string &variable_value = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const string_pair &pair) {
+        return pair.second == line[1];
+    })->first;
+
+    int result = system((std::string("python ./calculator/calculator.py ADD ") + variable_value + " " + line[2]).c_str());
+
+    variable_value = std::to_string(std::stoi(variable_value) + result);
+
+    return "";
 }
 
 std::string operation_sub(const std::vector<std::string> &line)
 {
     operation_parser(line);
-    return "sub;";
+    std::string &variable_value = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const string_pair &pair) {
+        return pair.second == line[1];
+    })->first;
+
+    int result = system((std::string("python ./calculator/calculator.py SUB ") + variable_value + " " + line[2]).c_str());
+
+    variable_value = std::to_string(std::stoi(variable_value) + result);
+
+    return "";
+}
+
+std::string operation_print(const std::vector<std::string> &line)
+{
+    std::string variable_value = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const string_pair &pair) {
+        return pair.second == line[1];
+    })->second;
+
+    std::cout << variable_value << std::endl;
+    return "";
 }
 }

@@ -86,11 +86,11 @@ void qtranslator::parse_file()
 
 void qtranslator::write_to_qasm()
 {
-    std::ofstream output;
-    output.open(m_out);
-    output << "OPENQASM 3;\n";
-    output << "include \"stdgates.inc\";\n\n";
-    for (auto &line : m_out_content)
-        output << line << '\n';
-    output.close();
+    //std::ofstream output;
+    //output.open(m_out);
+    //output << "OPENQASM 2.0;\n";
+    //output << "include \"qelib1.inc\"\n";
+    //for (auto &line : m_out_content)
+    //    output << line << '\n';
+    //output.close();
 }
