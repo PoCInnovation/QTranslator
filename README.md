@@ -1,12 +1,12 @@
 # QTranslator
 
-## Desciption
+## :speech_balloon: Desciption
 Transforms an .io file into QASM. The goal is to create a quantum calculator.
 
-## Summary
-  - [Desciption](#desciption)
-  - [Summary](#summary)
-  - [Install](#install)
+## :book: Summary
+  - [:speech_balloon: Desciption](#speech_balloon-desciption)
+  - [:book: Summary](#book-summary)
+  - [:computer: Install](#computer-install)
     - [:rocket: Clone repository](#rocket-clone-repository)
     - [:warning: Requirement](#warning-requirement)
   - [:writing_hand: How to write .io](#writing_hand-how-to-write-io)
@@ -18,7 +18,7 @@ Transforms an .io file into QASM. The goal is to create a quantum calculator.
     - [:bulb: Build Tips](#bulb-build-tips)
   - [:bust_in_silhouette: Authors](#bust_in_silhouette-authors)
   
-## Install
+## :computer: Install
 
 ### :rocket: Clone repository
 
