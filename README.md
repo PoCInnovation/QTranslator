@@ -13,9 +13,9 @@ Transforms an .io file into QASM. The goal is to create a quantum calculator.
     - [Example](#example)
   - [:checkered_flag: Quick-Start](#checkered_flag-quick-start)
   - [More informations](#more-informations)
-    - [Manual](#manual)
-    - [Build and run unit tests](#build-and-run-unit-tests)
-    - [Build Tips](#build-tips)
+    - [:ledger: Manual](#manual)
+    - [:white_check_mark: Build and run unit tests](#build-and-run-unit-tests)
+    - [:bulb: Build Tips](#build-tips)
   - [Authors](#authors)
   
 ## Install
@@ -54,7 +54,7 @@ make
 ```
 
 ## More informations
-### Manual
+### :ledger: Manual
 
 ```
 USAGE:
@@ -72,7 +72,7 @@ RETURN VALUE:
 ```
 
 
-### Build and run unit tests
+### :white_check_mark: Build and run unit tests
 
 To build the tests, execute the following command :  
 ```make tests```
@@ -80,7 +80,7 @@ To build the tests, execute the following command :
 After that, you will be able to run them using the following command :  
 ```./QTranslatorTests```
 
-### Build Tips
+### :bulb: Build Tips
 
 If you want to remove all objects files :  
 `make clean`  
