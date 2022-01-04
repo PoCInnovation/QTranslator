@@ -1,12 +1,18 @@
-from qiskit import IBMQ
+from qiskit import IBMQ, Aer
 import qiskit
-import sys
 
 def ibm_exec(circuit, number_measurement=1):
     IBMQ.save_account("IBM TOKEN", overwrite=True)
 
-    provider = IBMQ.load_account()
-    backend = provider.get_backend("ibmq_qasm_simulator")
+def ibm_exec(circuit, number_measurement=1, send_to_ibm=False):
 
-    output = qiskit.execute(circuit, backend, shots=number_measurement).result().get_counts()
+    if send_to_ibm:
+        provider = IBMQ.load_account()
+        backend = provider.get_backend("qasm_simulator_py")
+    else:
+        backend = Aer.get_backend("qasm_simulator")
+
+    output = (
+        qiskit.execute(circuit, backend, shots=number_measurement).result().get_counts()
+    )
     return int(list(output)[0], 2)

@@ -25,3 +25,4 @@ QTranslatorTests
 
 doc/latex/
 doc/html/
+.cache/clangd/index
