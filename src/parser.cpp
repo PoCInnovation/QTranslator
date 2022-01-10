@@ -63,7 +63,11 @@ void operation_parser(const std::vector<std::string> &line)
 int exec(std::string cmd) {
     std::array<char, 128> buffer;
     std::string result;
+    #if defined(_WIN32)
+    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
+    #else
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
+    #endif
     if (!pipe) {
         throw std::runtime_error("popen() failed!");
     }
