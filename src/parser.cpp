@@ -19,6 +19,11 @@ struct symbol_data {
 using symbol_pair = std::pair<std::string, symbol_data>;
 std::vector<symbol_pair> symbol_table;
 
+struct operation_data {
+    int arg1, arg2;
+    std::vector<symbol_pair>::iterator result;
+};
+
 std::string create_variable(const std::vector<std::string> &line)
 {
     if (line.size() != 3)
@@ -42,8 +47,11 @@ std::string create_variable(const std::vector<std::string> &line)
     return "qubit[" + parser::type_size.at(line[0]) + "] " + line[1] + ";";
 }
 
-void operation_parser(const std::vector<std::string> &line)
+operation_data operation_parser(const std::vector<std::string> &line)
 {
+    int arg1;
+    int arg2;
+
     if (line.size() != 3)
         throw transpiler::exception(0, line.front(), "(...) expected 2 arguments but ", std::to_string(line.size() - 1), " were provided");
     if (std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
@@ -58,6 +66,29 @@ void operation_parser(const std::vector<std::string> &line)
         }) == std::end(symbol_table))
             throw transpiler::exception(2, line.front(), "(...) unknown symbol '", line[2], '\'');
     }
+    
+    auto it1 = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
+        return pair.first == line[1];
+    });
+    if (it1 != std::end(symbol_table)) {
+        arg1 = it1->second.value;
+    } else {
+        throw transpiler::exception(1, line.front(), "(...) unknown symbol '", line[1], '\'');
+    }
+
+    auto it2 = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
+        return pair.first == line[2];
+    });
+    if (it2 != std::end(symbol_table)) {
+        arg2 = it2->second.value;
+    } else {
+        try {
+            arg2 = std::stoi(line[2]);
+        } catch (...) {
+            throw transpiler::exception(2, line.front(), "(...) unknown symbol '", line[2], '\'');
+        }
+    }
+    return {arg1, arg2, it1};
 }
 
 int exec(const std::string &cmd) {
@@ -77,32 +108,20 @@ int exec(const std::string &cmd) {
 
 std::string operation_add(const std::vector<std::string> &line)
 {
-    operation_parser(line);
-    auto it = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
-        return pair.first == line[1];
-    });
-    if (it != std::end(symbol_table)) {
-
-        int result = exec((std::string("python ./calculator/calculator.py ADD ") + std::to_string(it->second.value) + " " + line[2] + " ibm"));
-
-        it->second.value = result;
-    }
+    auto args = operation_parser(line);
+    
+    int result = exec((std::string("python ./calculator/calculator.py ADD ") + std::to_string(args.arg1) + " " + std::to_string(args.arg2) + " ibm"));
+    args.result->second.value = result;
 
     return "";
 }
 
 std::string operation_sub(const std::vector<std::string> &line)
 {
-    operation_parser(line);
-    auto it = std::find_if(symbol_table.begin(), symbol_table.end(), [line](const symbol_pair &pair) {
-        return pair.first == line[1];
-    });
-    if (it != std::end(symbol_table)) {
-
-        int result = exec((std::string("python ./calculator/calculator.py SUB ") + std::to_string(it->second.value) + " " + line[2] + " ibm").c_str());
-
-        it->second.value = result;
-    }
+    auto args = operation_parser(line);
+    
+    int result = exec((std::string("python ./calculator/calculator.py SUB ") + std::to_string(args.arg1) + " " + std::to_string(args.arg2) + " ibm"));
+    args.result->second.value = result;
 
     return "";
 }
