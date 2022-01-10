@@ -19,13 +19,13 @@ jobs:
                 include:
                   - os: windows-latest
                     bin: QTranslatorTests.exe
-                    dir: Debug
+                    dir: ./Debug/
                   - os: ubuntu-latest
                     bin: QTranslatorTests
-                    dir: .
+                    dir: ./
                   - os: macos-latest
                     bin: QTranslatorTests
-                    dir: .
+                    dir: ./
 
         name: CI
         runs-on: ${{ matrix.os }}
@@ -52,5 +52,4 @@ jobs:
                 cmake --build build_tests/
 
             - name: Run Tests
-              working-directory: ${{ matrix.dir }}
-              run: ./${{ matrix.bin }}
+              run: ${{ matrix.dir }}${{ matrix.bin }}

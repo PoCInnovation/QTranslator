@@ -60,7 +60,7 @@ void operation_parser(const std::vector<std::string> &line)
     }
 }
 
-int exec(std::string cmd) {
+int exec(const std::string &cmd) {
     std::array<char, 128> buffer;
     std::string result;
     #if defined(_WIN32)
@@ -68,12 +68,10 @@ int exec(std::string cmd) {
     #else
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
     #endif
-    if (!pipe) {
+    if (!pipe)
         throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr)
         result += buffer.data();
-    }
     return std::stoi(result);
 }
 
