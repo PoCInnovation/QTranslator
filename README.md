@@ -87,6 +87,6 @@ If you want to remove all objects files :
 
 ## :bust_in_silhouette: Authors
 
-| [<img src="https://github.com/tocola.png?size=85" width=85><br><sub>Martin OLIVIER</sub>](https://github.com/tocola) | [<img src="https://github.com/jeanbaptistedebize.png?size=85" width=85><br><sub>Jean-Baptiste DEBIZE</sub>](https://github.com/jeanbaptistedebize) | [<img src="https://github.com/Tfourcat.png?size=85" width=85><br><sub>Théo FOURCAt</sub>](https://github.com/Tfourcat)
+| [<img src="https://github.com/tocola.png?size=85" width=85><br><sub>Martin OLIVIER</sub>](https://github.com/tocola) | [<img src="https://github.com/jeanbaptistedebize.png?size=85" width=85><br><sub>Jean-Baptiste DEBIZE</sub>](https://github.com/jeanbaptistedebize) | [<img src="https://github.com/Tfourcat.png?size=85" width=85><br><sub>Théo FOURCAT</sub>](https://github.com/Tfourcat)
 | :---: | :---: | :---: |
 <h2 align=center>
