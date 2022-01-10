@@ -20,8 +20,8 @@ namespace tools {
      *
      *  @param str the string to be parsed
      *  @param separator the character used to split the string
-     *  @param push_empty_strings enable or disable the push of empty strings inside the vector
+     *  @param push_separators enable or disable the push of empty strings at separators inside the vector
      *  @return the parsed string as an std::vector<string>
      */
-    std::vector<std::string> string_to_vector(const std::string &str, char separator, bool push_empty_strings = false);
+    std::vector<std::string> string_to_vector(const std::string &str, char separator, bool push_separators = false);
 }

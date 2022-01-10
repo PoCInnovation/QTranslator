@@ -16,6 +16,7 @@ QTranslatorTests
 *.so
 *.dll
 *.dylib
+*.pyc
 *build/
 *build_tests/
 *cmake-build-*/

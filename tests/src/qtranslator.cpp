@@ -12,14 +12,3 @@ TEST(qtranslator, no_file)
         EXPECT_EQ(true, true);
     }
 }
-
-TEST(qtranslator, adder)
-{
-    std::array<const char *, 2> args{"qtranslator", "tests/data/adder.io"};
-    try {
-        qtranslator app(2, args.data());
-        EXPECT_EQ(true, true);
-    } catch (...) {
-        EXPECT_EQ(true, false);
-    }
-}

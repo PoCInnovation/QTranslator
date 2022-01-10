@@ -20,6 +20,7 @@ set(SOURCES
 
 set(TEST_SOURCES
     tests/src/qtranslator.cpp
+    tests/src/tools.cpp
 )
 
 if(BUILD_TESTS)

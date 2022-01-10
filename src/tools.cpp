@@ -15,15 +15,14 @@ std::string get_file_content(const std::string &path)
     return file_content;
 }
 
-std::vector<std::string> string_to_vector(const std::string &str, char separator, bool push_empty_strings)
+std::vector<std::string> string_to_vector(const std::string &str, char separator, bool push_separators)
 {
-    std::vector<std::string> array;
-    std::string temp;
-    size_t len = str.size();
+    std::vector<std::string> array{};
+    std::string temp{};
 
-    for (size_t i = 0; i < len; i++) {
+    for (size_t i = 0; i < str.size(); i++) {
         if (str[i] == separator) {
-            if (push_empty_strings || !temp.empty()) {
+            if (push_separators or (!push_separators and !temp.empty())) {
                 array.push_back(temp);
                 temp.clear();
             }
@@ -31,7 +30,7 @@ std::vector<std::string> string_to_vector(const std::string &str, char separator
         else
             temp.push_back(str[i]);
     }
-    if (push_empty_strings || !temp.empty())
+    if (push_separators or (!push_separators and !temp.empty()))
         array.push_back(temp);
     return array;
 }
