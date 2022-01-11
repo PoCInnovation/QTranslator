@@ -1,54 +1,59 @@
-from qiskit import ClassicalRegister, QuantumRegister
-from qiskit import QuantumCircuit
-
-
-class AddCircuit:
+from qiskit import ClassicalRegister, QuantumRegister, Aer, QuantumCircuit, execute
+import operator
+from math import pi
+class ArithmeticCircuit:
     def fillRegister(self, register, number, length):
         i = 0
         for bit in number:
             if bit == "1":
-                self.circuit.x(register[length - (i + 1)])
+                self.circ.x(register[length - (i + 1)])
             i += 1
 
-    def __init__(self, first, second):
-        length = len(first)
-        length2 = len(second)
+    def createInputState(self, reg, n):
+        self.circ.h(reg[n])
+        for i in range(n):
+            self.circ.cp(pi / float(2 ** (i + 1)), reg[n - (i + 1)], reg[n])
 
-        if length > 8 or length2 > 8:
-            print("Please enter valid binary numbers inputs (less than 8 bits).")
-            exit()
+    def evolveQFTState(self, reg_a, reg_b, n):
+        for i in range(n + 1):
+            self.circ.cp(pi / float(2 ** (i)), reg_b[n - i], reg_a[n])
 
-        maxLength = max(length, length2)
+    def inverseQFT(self, reg, n):
+        for i in range(0, n):
+            self.circ.cp(-1 * pi / float(2 ** (n - i)), reg[i], reg[n])
+        self.circ.h(reg[n])
 
-        firstNumber = QuantumRegister(maxLength)
-        secondNumber = QuantumRegister(maxLength + 1)
-        carry = QuantumRegister(maxLength)
-        output = ClassicalRegister(maxLength + 1)
+    def __init__(self, n1, n2, op="ADD") -> str:
+        ## get args
+        l1 = len(n1)
+        l2 = len(n2)
+        if l2 > l1:
+            n1, n2 = n2, n1
+            l2, l1 = l1, l2
+        n2 = ("0") * (l1 - l2) + n2
+        size = l1
 
-        self.circuit = QuantumCircuit(firstNumber, secondNumber, carry, output)
+        ## Init
+        self.qreg1 = QuantumRegister(size + 1)
+        self.qreg2 = QuantumRegister(size + 1)
+        self.outreg = ClassicalRegister(size + 1)
+        self.circ = QuantumCircuit(self.qreg1, self.qreg2, self.outreg)
+        self.fillRegister(self.qreg1, n1, size)
+        self.fillRegister(self.qreg2, n2, size)
 
-        self.fillRegister(firstNumber, first, length)
-        self.fillRegister(secondNumber, second, length2)
+        ## Calc
+        if op == "SUB":
+            self.circ.x(self.qreg1)
+        for i in range(size + 1):
+            self.createInputState(self.qreg1, size - i)
+        for i in range(size + 1):
+            self.evolveQFTState(self.qreg1, self.qreg2, size - i)
+        for i in range(size + 1):
+            self.inverseQFT(self.qreg1, i)
+        if op == "SUB":
+            self.circ.x(self.qreg1)
 
-        for i in range(maxLength - 1):
-            self.circuit.ccx(firstNumber[i], secondNumber[i], carry[i + 1])
-            self.circuit.cx(firstNumber[i], secondNumber[i])
-            self.circuit.ccx(carry[i], secondNumber[i], carry[i + 1])
-
-        self.circuit.ccx(firstNumber[maxLength - 1], secondNumber[maxLength - 1], secondNumber[maxLength])
-        self.circuit.cx(firstNumber[maxLength - 1], secondNumber[maxLength - 1])
-        self.circuit.ccx(carry[maxLength - 1], secondNumber[maxLength - 1], secondNumber[maxLength])
-
-        self.circuit.cx(carry[maxLength - 1], secondNumber[maxLength - 1])
-
-        for i in range(maxLength - 1):
-            self.circuit.ccx(carry[(maxLength - 2) - i], secondNumber[(maxLength - 2) - i], carry[(maxLength - 1) - i])
-            self.circuit.cx(firstNumber[(maxLength - 2) - i], secondNumber[(maxLength - 2) - i])
-            self.circuit.ccx(firstNumber[(maxLength - 2) - i], secondNumber[(maxLength - 2) - i], carry[(maxLength - 1) - i])
-
-            self.circuit.cx(carry[(maxLength - 2) - i], secondNumber[(maxLength - 2) - i])
-            self.circuit.cx(firstNumber[(maxLength - 2) - i], secondNumber[(maxLength - 2) - i])
-
-        for i in range(maxLength + 1):
-            self.circuit.measure(secondNumber[i], output[i])
+        ## Get result
+        for i in range(size + 1):
+            self.circ.measure(self.qreg1[i], self.outreg[i])
 
