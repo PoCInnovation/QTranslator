@@ -11,12 +11,21 @@ defaults:
         shell: bash
 
 jobs:
-    build:
+    build_and_test:
         strategy:
             fail-fast: false
             matrix:
-              os: [ubuntu-latest, macos-latest]
-              build_type: [Debug, Release]
+                os: [windows-latest, ubuntu-latest, macos-latest]
+                include:
+                  - os: windows-latest
+                    bin: QTranslatorTests.exe
+                    dir: ./Debug/
+                  - os: ubuntu-latest
+                    bin: QTranslatorTests
+                    dir: ./
+                  - os: macos-latest
+                    bin: QTranslatorTests
+                    dir: ./
 
         name: CI
         runs-on: ${{ matrix.os }}
@@ -32,15 +41,15 @@ jobs:
                 sudo apt install -y g++-11
                 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 60 --slave /usr/bin/g++ g++ /usr/bin/g++-11
 
-            - name: Install Python Dependencies
-              run: |
-                pip install qiskit
-
             - name: Build Project
-              run: make
+              run: |
+                cmake . -B build/ -DCMAKE_BUILD_TYPE=Debug
+                cmake --build build/
 
             - name: Build Tests
-              run: make tests
+              run: |
+                cmake . -B build_tests/ -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON
+                cmake --build build_tests/
 
             - name: Run Tests
-              run: ./QTranslatorTests
+              run: ${{ matrix.dir }}${{ matrix.bin }}
