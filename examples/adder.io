@@ -12,3 +12,5 @@ add i 15
 print i
 sub i 5
 add i j
+
+print i
