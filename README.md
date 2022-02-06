@@ -18,7 +18,7 @@ git@github.com:PoCInnovation/QTranslator.git
 
 ## :writing_hand: How to write .asm
 ### :clipboard: Example
-Create a file create **operations.asm**:
+Create a file **operations.asm**:
 ```asm
 ; operations.asm
 
