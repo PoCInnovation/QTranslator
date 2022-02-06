@@ -1,23 +1,8 @@
 # QTranslator
 
 ## :speech_balloon: Desciption
-Transforms an .io file into QASM. The goal is to create a quantum calculator.
+Transforms an .asm file into QASM. The goal is to create a quantum calculator.
 
-## :book: Summary
-  - [:speech_balloon: Desciption](#speech_balloon-desciption)
-  - [:book: Summary](#book-summary)
-  - [:computer: Install](#computer-install)
-    - [:rocket: Clone repository](#rocket-clone-repository)
-    - [:warning: Requirement](#warning-requirement)
-  - [:writing_hand: How to write .io](#writing_hand-how-to-write-io)
-    - [:clipboard: Example](#clipboard-example)
-  - [:checkered_flag: Quick-Start](#checkered_flag-quick-start)
-  - [:information_source: More informations](#information_source-more-informations)
-    - [:ledger: Manual](#ledger-manual)
-    - [:white_check_mark: Build and run unit tests](#white_check_mark-build-and-run-unit-tests)
-    - [:bulb: Build Tips](#bulb-build-tips)
-  - [:bust_in_silhouette: Authors](#bust_in_silhouette-authors)
-  
 ## :computer: Install
 
 ### :rocket: Clone repository
@@ -31,26 +16,27 @@ git@github.com:PoCInnovation/QTranslator.git
 - [CMake >= 3.17](https://cmake.org/download/)
 - [C++20](https://en.cppreference.com/w/cpp/20)
 
-## :writing_hand: How to write .io
+## :writing_hand: How to write .asm
 ### :clipboard: Example
-Create a file create **operations.io**.  
-The custom language must follow this pattern:  
-```python
-# operations.io
+Create a file create **operations.asm**:
+```asm
+; operations.asm
 
-int i 3
-int j 10
+xor rax, rax
 
-add i 5
-sub i 5
-add i j
+cmp BYTE[rax], 0
+je endl
+inc rax
+
+endl:
+ret
 ```
 
 ## :checkered_flag: Quick-Start
 
 ```shell
 make
-./QTranslator operations.io
+./QTranslator operations.asm
 ```
 
 ## :information_source: More informations
@@ -58,10 +44,10 @@ make
 
 ```
 USAGE:
-        ./QTranslator file.io [OPTIONS]
+        ./QTranslator file.asm [OPTIONS]
 
 DESCRIPTION:
-        file.io         file to be translated into QASM
+        file.io         ASM source code to be translated into QASM
 
 OPTIONS:
         -h --help       Display this help menu

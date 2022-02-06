@@ -20,7 +20,7 @@ void qtranslator::help(const char *bin, int return_val)
     std::cout << "\t" << bin << " file.asm [OPTIONS]\n\n";
 
     std::cout << "DESCRIPTION:\n";
-    std::cout << "\tfile.asm\t\tASM source code to be translated into QASM\n\n";
+    std::cout << "\tfile.asm\tASM source code to be translated into QASM\n\n";
 
     std::cout << "OPTIONS:\n";
     std::cout << "\t-h --help\tDisplay this help menu\n";
