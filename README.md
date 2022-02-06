@@ -47,7 +47,7 @@ USAGE:
         ./QTranslator file.asm [OPTIONS]
 
 DESCRIPTION:
-        file.io         ASM source code to be translated into QASM
+        file.asm         ASM source code to be translated into QASM
 
 OPTIONS:
         -h --help       Display this help menu
