@@ -10,6 +10,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 option(BUILD_TESTS "When sets to ON, builds the unit tests" OFF)
 
+if(BUILD_TESTS)
+    find_package(googletest QUIET)
+    include(FetchContent)
+    FetchContent_Declare(
+	    googletest
+	    URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
+    )
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+endif()
+
 set(MAIN src/main.cpp)
 
 set(SOURCES
@@ -36,15 +47,6 @@ else()
 endif()
 
 if(BUILD_TESTS)
-    find_package(googletest QUIET)
-    include(FetchContent)
-    FetchContent_Declare(
-	    googletest
-	    URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
-    )
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(googletest)
-
     add_executable(${BIN}
         ${SOURCES}
         ${TEST_SOURCES}
