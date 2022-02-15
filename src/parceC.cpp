@@ -9,6 +9,7 @@
 #include <map>
 #include "Move.hpp"
 #include "Add.hpp"
+#include "Sub.hpp"
 #include "tools.hpp"
 #include <sstream>
 #include <QRegister.hpp>
@@ -19,7 +20,7 @@ typedef Instruction* (*Creator)(std::vector<std::string>);
 template <typename T>
 static Instruction* make(std::vector<std::string> args) { return new T(args); }
 
-std::map<std::string, Creator> IntructionsTab = {{"add", make<Add>}, {"mov", make<Move>}};
+std::map<std::string, Creator> IntructionsTab = {{"add", make<Add>}, {"mov", make<Move>}, {"sub", make<Sub>}};
 
 template<typename Map> typename Map::const_iterator
 find_prefix(Map const& map, typename Map::key_type const& key)
