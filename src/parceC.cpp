@@ -73,10 +73,13 @@ std::vector<Instruction*> parceAsm(std::vector<std::string> cmdAsm)
     return instructionsList;
 }
 
-int main(void)
+int main(int av, char **argv)
 {
     Circuit circ; circ.redirecCout();
-    std::vector<std::string> cmdAsm = parceBinary("c.asm");
+    if (av < 2) {
+        throw std::runtime_error("Need one file\n");
+    }
+    std::vector<std::string> cmdAsm = parceBinary(argv[1]);
     std::vector<Instruction*> instructionsList = parceAsm(cmdAsm);
 
     circ.addReg("add", 0);

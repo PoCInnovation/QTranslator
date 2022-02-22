@@ -29,6 +29,7 @@ class Circuit {
         QRegister *addReg(const std::string &regKey, int value);
         QRegister *addReg(const std::string &regKey, QRegister &other);
     private:
+        std::string _header;
         std::ostringstream _coutBuffer;
         std::streambuf* _oldBuffer;
         std::map<std::string, QRegister*> _regs;
