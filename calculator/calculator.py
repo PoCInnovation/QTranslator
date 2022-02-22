@@ -12,11 +12,13 @@ if len(sys.argv) == 5:
 else:
     backend = 'qiskit'
 
-first = bin(int(sys.argv[2]))[2:]
-second = bin(int(sys.argv[3]))[2:] if sys.argv[1] == "ADD" else "0" + bin(~int(sys.argv[3]) + 1)[3:]
+first = '{0:{fill}3b}'.format(int(sys.argv[2]), fill='0')
+second = '{0:{fill}3b}'.format(int(sys.argv[3]), fill='0')
 
 if (sys.argv[1] == "ADD"):
     circuit = ArithmeticCircuit(first, second)
+elif (sys.argv[1] == "MUL"):
+    circuit = ArithmeticCircuit(first, second, "MUL")
 elif (sys.argv[1] == "SUB"):
     circuit = ArithmeticCircuit(first, second, "SUB")
 else:
