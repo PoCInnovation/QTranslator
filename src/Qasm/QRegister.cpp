@@ -18,14 +18,14 @@ void QRegister::fillQRegister(int value)
 {
     size_t index = 0;
     std::string bitString = std::bitset<8>(value).to_string();
-    this->_size = bitString.length();
 
+    this->_size = bitString.length();
     for (const char c : bitString) {
         if (c == '1')
             this->x(this->_size - index - 1);
         index++;
     }
-    this->_size = 8;
+    this->_size = 9;
 }
 
 void QRegister::reset()
@@ -65,6 +65,7 @@ const std::string QRegister::qRegAt(size_t index) const
 QRegister::~QRegister()
 {}
 
+// QASM Instructions
 void QRegister::x()
 {
     std::cout << __func__ << " ";
