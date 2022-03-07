@@ -14,13 +14,15 @@
 #include <sstream>
 #include <QRegister.hpp>
 #include <Circuit.hpp>
+#include "Mul.hpp"
+#include "Div.hpp"
 
 typedef Instruction* (*Creator)(std::vector<std::string>);
 
 template <typename T>
 static Instruction* make(std::vector<std::string> args) { return new T(args); }
 
-std::map<std::string, Creator> IntructionsTab = {{"add", make<Add>}, {"mov", make<Move>}, {"sub", make<Sub>}};
+std::map<std::string, Creator> IntructionsTab = {{"add", make<Add>}, {"mov", make<Move>}, {"sub", make<Sub>}, {"imul", make<Mul>}, {"idivl", make<Div>}};
 
 template<typename Map> typename Map::const_iterator
 find_prefix(Map const& map, typename Map::key_type const& key)
@@ -83,6 +85,7 @@ int main(int av, char **argv)
     std::vector<Instruction*> instructionsList = parceAsm(cmdAsm);
 
     circ.addReg("add", 0);
+    circ.addReg("div", 0);
     std::cout << "qreg cin[1];" << std::endl;
     std::cout << "qreg cout[1];" << std::endl;
 

@@ -26,6 +26,7 @@ void QRegister::fillQRegister(int value)
         index++;
     }
     this->_size = 9;
+    this->_value = value;
 }
 
 void QRegister::reset()
@@ -35,13 +36,13 @@ void QRegister::reset()
 
 QRegister::QRegister(int value)
 {
-
     this->_name = "q" + std::to_string(getQnumber());
     this->fillQRegister(value);
 }
 
 QRegister::QRegister(const QRegister &other)
 {
+    this->_value = other.getValue();
     this->_name = "q" + std::to_string(getQnumber());
     this->_size = other._size;
     cx(other);
@@ -65,6 +66,15 @@ const std::string QRegister::qRegAt(size_t index) const
 QRegister::~QRegister()
 {}
 
+void QRegister::setValue(size_t v)
+{
+    _value = v;
+}
+
+const size_t QRegister::getValue(void) const
+{
+    return _value;
+}
 // QASM Instructions
 void QRegister::x()
 {

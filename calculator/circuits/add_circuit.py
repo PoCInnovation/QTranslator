@@ -66,7 +66,7 @@ class ArithmeticCircuit:
             size = len(self.qreg1) - 1
             for i in range(size + 1):
                 self.executeQFT(self.qreg2, size - i)
-            for j in range(int(n2, 2)):
+            for _ in range(int(n2, 2)):
                 for i in range(size + 1):
                     self.evolveQFTStateSum(self.qreg2, self.qreg1, size - i)
             for i in range(size + 1):
@@ -89,4 +89,3 @@ class ArithmeticCircuit:
                 self.circ.measure(self.qreg1[i], self.outreg[i])
 
         ## Get result
-

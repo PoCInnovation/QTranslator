@@ -21,10 +21,12 @@ class QRegister {
         const std::string qRegAt(size_t index) const;
         void fillQRegister(int value);
         void reset();
+        void setValue(size_t);
 
         //Getters
         const std::string &getName(void) const;
         const size_t getSize(void) const;
+        const size_t getValue(void) const;
 
         // Quantum Gate
         void x();
@@ -41,6 +43,7 @@ class QRegister {
     private:
         std::string _name;
         size_t _size;
+        size_t _value;
 };
 
 #endif /* !QREGISTER_HPP_ */

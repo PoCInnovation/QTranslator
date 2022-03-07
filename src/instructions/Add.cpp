@@ -11,6 +11,7 @@
 
 static void opAdd(QRegister &qreg1, QRegister &qreg2)
 {
+    qreg1.setValue(qreg2.getValue() + qreg1.getValue());
     std::cout << "reset cin;" << std::endl;
     std::cout << "reset cout;" << std::endl;
     std::cout << "majority cin[0]," + qreg1.getName() + "[0]," + qreg2.getName() + "[0];" << std::endl;
