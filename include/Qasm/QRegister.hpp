@@ -33,6 +33,7 @@ class QRegister {
         void x(size_t index);
         void cx(const QRegister &other);
         void cx(size_t index, const QRegister &other);
+        void cx(size_t curindex, size_t index, const QRegister &other);
         void h();
         void h(size_t index);
         void cp(int divPi, size_t index, QRegister &other, size_t otherIndex);

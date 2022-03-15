@@ -100,6 +100,12 @@ void QRegister::cx(size_t index, const QRegister &other)
     std::cout << other.qRegAt(index) << "," << this->qRegAt(index) << ";" << std::endl;
 }
 
+void QRegister::cx(size_t curindex, size_t index, const QRegister &other)
+{
+    std::cout << __func__ << " ";
+    std::cout << other.qRegAt(index) << "," << this->qRegAt(curindex) << ";" << std::endl;
+}
+
 void QRegister::h()
 {
     std::cout << __func__ << " ";

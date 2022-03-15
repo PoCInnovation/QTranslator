@@ -16,13 +16,25 @@
 #include <Circuit.hpp>
 #include "Mul.hpp"
 #include "Div.hpp"
+#include "Sar.hpp"
+#include "Shr.hpp"
+#include "Shl.hpp"
 
 typedef Instruction* (*Creator)(std::vector<std::string>);
 
 template <typename T>
 static Instruction* make(std::vector<std::string> args) { return new T(args); }
 
-std::map<std::string, Creator> IntructionsTab = {{"add", make<Add>}, {"mov", make<Move>}, {"sub", make<Sub>}, {"imul", make<Mul>}, {"idivl", make<Div>}};
+std::map<std::string, Creator> IntructionsTab = {
+    {"add", make<Add>},
+    {"mov", make<Move>},
+    {"sub", make<Sub>},
+    {"imul", make<Mul>},
+    {"idivl", make<Div>},
+    {"sar", make<Sar>},
+    {"shr", make<Shr>},
+    {"shl", make<Shl>}
+};
 
 template<typename Map> typename Map::const_iterator
 find_prefix(Map const& map, typename Map::key_type const& key)
