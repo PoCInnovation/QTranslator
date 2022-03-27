@@ -21,12 +21,21 @@ if(BUILD_TESTS)
     FetchContent_MakeAvailable(googletest)
 endif()
 
-set(MAIN src/main.cpp)
-
 set(SOURCES
-    src/qtranslator.cpp
+    src/main.cpp
     src/parser.cpp
     src/tools.cpp
+    src/Qasm/Circuit.cpp
+    src/qtranslator.cpp
+    src/Qasm/QRegister.cpp
+    src/instructions/Add.cpp
+    src/instructions/Div.cpp
+    src/instructions/Move.cpp
+    src/instructions/Mul.cpp
+    src/instructions/Sar.cpp
+    src/instructions/Shl.cpp
+    src/instructions/Shr.cpp
+    src/instructions/Sub.cpp
 )
 
 set(TEST_SOURCES
@@ -59,9 +68,12 @@ if(BUILD_TESTS)
 else()
     add_executable(${BIN}
         ${SOURCES}
-        ${MAIN}
     )
-    target_include_directories(${BIN} PRIVATE include)
+    target_include_directories(${BIN} PRIVATE
+        include
+        include/intructions
+        include/Qasm
+        )
 endif()
 
 if(UNIX)

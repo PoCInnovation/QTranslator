@@ -34,17 +34,13 @@ void QRegister::reset()
     std::cout << __func__ << " " << _name << ";" << std::endl;
 }
 
-QRegister::QRegister(int value)
+QRegister::QRegister(int value): _name("q" + std::to_string(getQnumber())), _size(0), _value(0)
 {
-    this->_name = "q" + std::to_string(getQnumber());
     this->fillQRegister(value);
 }
 
-QRegister::QRegister(const QRegister &other)
+QRegister::QRegister(const QRegister &other): _name("q" + std::to_string(getQnumber())), _size(other._size), _value(other.getValue())
 {
-    this->_value = other.getValue();
-    this->_name = "q" + std::to_string(getQnumber());
-    this->_size = other._size;
     cx(other);
 }
 
@@ -53,7 +49,7 @@ const std::string &QRegister::getName(void) const
     return this->_name;
 }
 
-const size_t QRegister::getSize(void) const
+size_t QRegister::getSize(void) const
 {
     return this->_size;
 }
@@ -71,10 +67,11 @@ void QRegister::setValue(size_t v)
     _value = v;
 }
 
-const size_t QRegister::getValue(void) const
+size_t QRegister::getValue(void) const
 {
     return _value;
 }
+
 // QASM Instructions
 void QRegister::x()
 {

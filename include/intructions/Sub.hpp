@@ -13,7 +13,7 @@
 
 class Sub : public Instruction {
     public:
-        Sub(const std::vector<std::string>args) { _args = args;};
+        Sub(const std::vector<std::string>args): _args(args) {};
         virtual void run(Circuit &circ);
     private:
         std::vector<std::string> _args;

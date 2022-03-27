@@ -1,23 +1,41 @@
 #pragma once
 
-#include <map>
+
+#include "Move.hpp"
+#include "Add.hpp"
+#include "Sub.hpp"
+#include "tools.hpp"
+#include "QRegister.hpp"
+#include "Circuit.hpp"
+#include "Mul.hpp"
+#include "Div.hpp"
+#include "Sar.hpp"
+#include "Shr.hpp"
+#include "Shl.hpp"
+
+#include <sstream>
 #include <vector>
 #include <string>
-#include <functional>
+#include <map>
 
 /**
  *  This namespace contains parsing functions used during transpilation
  */
 namespace parser {
+    typedef Instruction* (*Creator)(std::vector<std::string>);
+    template <typename T>
+    static Instruction* make(std::vector<std::string> args) { return new T(args); }
 
-std::string action_new_tag(std::string tag_name, size_t line);
-
-std::string action_ret(const std::vector<std::string> &line);
-
-/**
- *  Associative table that redirects from a call as a string to a function
- */
-const std::map<std::string, std::function<std::string(const std::vector<std::string> &)>> actions {
-    {"ret", action_ret},
-};
+    static const std::map<std::string, Creator> IntructionsTab = {
+        {"add", make<Add>},
+        {"mov", make<Move>},
+        {"sub", make<Sub>},
+        {"imul", make<Mul>},
+        {"idivl", make<Div>},
+        {"sar", make<Sar>},
+        {"shr", make<Shr>},
+        {"shl", make<Shl>}
+    };
+    std::vector<Instruction*> parceAsm(std::vector<std::string> cmdAsm);
+    std::vector<std::string> parceBinary(std::string filepath);
 }

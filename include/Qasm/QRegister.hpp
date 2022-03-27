@@ -25,8 +25,8 @@ class QRegister {
 
         //Getters
         const std::string &getName(void) const;
-        const size_t getSize(void) const;
-        const size_t getValue(void) const;
+        size_t getSize(void) const;
+        size_t getValue(void) const;
 
         // Quantum Gate
         void x();

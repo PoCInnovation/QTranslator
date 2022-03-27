@@ -7,7 +7,7 @@
 
 #include "Circuit.hpp"
 
-Circuit::Circuit(): _oldBuffer(nullptr)
+Circuit::Circuit(): _header(""), _coutBuffer(), _oldBuffer(nullptr), _regs()
 {
     _header.append("OPENQASM 2.0;\n");
     _header.append("include \"qelib1.inc\";\n");
@@ -16,12 +16,12 @@ Circuit::Circuit(): _oldBuffer(nullptr)
 
 Circuit::~Circuit()
 {
-    if (_oldBuffer != nullptr)
-        std::cout.rdbuf(_oldBuffer);
+    if (_oldBuffer.get() != nullptr)
+        std::cout.rdbuf(_oldBuffer.get());
 }
 
 void Circuit::redirecCout(void) {
-    this->_oldBuffer = std::cout.rdbuf();
+    _oldBuffer.reset(std::cout.rdbuf());
     std::cout.rdbuf(_coutBuffer.rdbuf());
 }
 
@@ -30,7 +30,7 @@ void Circuit::draw(void)
     if (_oldBuffer == nullptr)
         return;
     // Set Cout to terminal
-    std::cout.rdbuf(_oldBuffer);
+    std::cout.rdbuf(_oldBuffer.get());
     // include
     std::cout << _header;
     // QuantumReg
@@ -40,7 +40,8 @@ void Circuit::draw(void)
     std::cout << "creg " << "c0[9];" << std::endl;
     // Qasm
     std::cout << _coutBuffer.str();
-    _oldBuffer = nullptr;
+    _oldBuffer.release();
+    _oldBuffer.reset(nullptr);
 }
 
 const std::ostringstream &Circuit::getBuffer(void) const

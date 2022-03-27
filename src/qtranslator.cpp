@@ -1,13 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <string_view>
+#include <filesystem>
+
 #include "qtranslator.hpp"
 #include "exception.hpp"
 #include "tools.hpp"
 #include "format.hpp"
 #include "parser.hpp"
 
-qtranslator::qtranslator(int ac, char const *av[])
+qtranslator::qtranslator(int ac, char const *av[]): _circ()
 {
     parse_args(ac, av);
     parse_file();
@@ -65,35 +67,25 @@ std::string get_cursor_delta(const std::vector<std::string> &parse, const size_t
 
 void qtranslator::parse_file()
 {
-    m_in_content = tools::string_to_vector(tools::get_file_content(m_in), '\n', true);
-    for (size_t i = 0; i < m_in_content.size(); i++) {
-        auto parse = tools::string_to_vector(m_in_content[i], ' ');
-        if (parse.empty() or parse.front().front() == ';')
-            continue;
-        try {
-            if (parse.size() == 1 and parse.front().size() > 1 and parse.front().back() == ':')
-                parser::action_new_tag(parse.front(), i);
-            else
-                m_out_content.push_back(parser::actions.at(parse.front())(parse));
-        } catch (const transpiler::exception &e) {
-            throw transpiler::exception(0, format::bold, m_in, ':', std::to_string(i + 1), ": ",
-            format::red, "error: ", format::reset, format::bold, e.what(), "\n\t",
-            format::reset, m_in_content[i], "\n\t", format::green, get_cursor_delta(parse, e.cursor()), '^', format::reset);
-        } catch (...) {
-            throw transpiler::exception(0, format::bold, m_in, ':', std::to_string(i + 1), ": ",
-            format::red, "error: ", format::reset, format::bold, "transpilation failed\n\t",
-            format::reset, m_in_content[i], "\n\t", format::green, '^', format::reset);
-        }
+    if (!std::filesystem::exists(m_in)) {
+        std::cerr << m_in + ": No such file." << std::endl;
+        std::exit(EXIT_FAILURE);
     }
+    _circ.redirecCout();
+    _cmdAsm = parser::parceBinary(m_in);
+    _instructionsList = parser::parceAsm(_cmdAsm);
 }
 
 void qtranslator::write_to_qasm()
 {
-    std::ofstream output;
-    output.open(m_out);
-    output << "OPENQASM 2.0;\n";
-    output << "include \"qelib1.inc\"\n";
-    for (auto &line : m_out_content)
-        output << line << '\n';
-    output.close();
+    _circ.addReg("add", 0);
+    _circ.addReg("div", 0);
+    std::cout << "qreg cin[1];" << std::endl;
+    std::cout << "qreg cout[1];" << std::endl;
+
+    for(auto t : _instructionsList)
+        t->run(_circ);
+
+    _circ.getReg("%eax")->measure();
+    _circ.draw();
 }

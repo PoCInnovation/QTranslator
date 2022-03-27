@@ -13,7 +13,7 @@
 
 class Move : public Instruction {
     public:
-        Move(const std::vector<std::string>args) { _args = args;};
+        Move(const std::vector<std::string>args): _args(args) {};
         virtual void run(Circuit &circ);
     private:
         void movValue(Circuit &circ);

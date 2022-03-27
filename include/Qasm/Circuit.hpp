@@ -8,10 +8,11 @@
 #ifndef CIRCUIT_HPP_
 #define CIRCUIT_HPP_
 
+#include "QRegister.hpp"
 #include <map>
 #include <string>
 #include <sstream>
-#include "QRegister.hpp"
+#include <memory>
 
 class Circuit {
     public:
@@ -31,7 +32,7 @@ class Circuit {
     private:
         std::string _header;
         std::ostringstream _coutBuffer;
-        std::streambuf* _oldBuffer;
+        std::unique_ptr<std::streambuf> _oldBuffer;
         std::map<std::string, QRegister*> _regs;
 };
 

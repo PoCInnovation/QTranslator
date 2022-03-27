@@ -13,7 +13,7 @@
 
 class Div : public Instruction {
     public:
-        Div(const std::vector<std::string>args) { _args = args;};
+        Div(const std::vector<std::string>args): _args(args) {};
         virtual void run(Circuit &circ);
     private:
         std::vector<std::string> _args;

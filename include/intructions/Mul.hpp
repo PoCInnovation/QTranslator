@@ -14,7 +14,7 @@
 class Mul : public Instruction {
 
     public:
-        Mul(const std::vector<std::string>args) { _args = args;};
+        Mul(const std::vector<std::string>args): _args(args) {};
         virtual void run(Circuit &circ);
     private:
         std::vector<std::string> _args;
