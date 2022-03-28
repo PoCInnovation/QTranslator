@@ -60,7 +60,11 @@ if(BUILD_TESTS)
         ${SOURCES}
         ${TEST_SOURCES}
     )
-    target_include_directories(${BIN} PRIVATE include)
+    target_include_directories(${BIN} PRIVATE
+        include
+        include/intructions
+        include/Qasm
+    )
     enable_testing()
     include(GoogleTest)
     gtest_discover_tests(${BIN})
