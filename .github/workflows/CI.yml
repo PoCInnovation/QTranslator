@@ -12,16 +12,6 @@ jobs:
             fail-fast: false
             matrix:
                 os: [windows-latest, ubuntu-latest, macos-latest]
-                include:
-                  - os: windows-latest
-                    bin: QTranslatorTests.exe
-                    dir: ./Debug/
-                  - os: ubuntu-latest
-                    bin: QTranslatorTests
-                    dir: ./
-                  - os: macos-latest
-                    bin: QTranslatorTests
-                    dir: ./
 
         name: ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
@@ -30,37 +20,8 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-python@v2
 
+            - name: Generate Build File
+              run: cmake . -B build
+
             - name: Build Project
-              run: |
-                cmake . -B build
-                cmake --build build
-
-            - name: Build Tests
-              run: |
-                cmake . -B build_tests -DBUILD_TESTS=ON
-                cmake --build build_tests
-
-            - name: Run Tests
-              run: ${{ matrix.dir }}${{ matrix.bin }}
-
-    memory_check:
-        name: memory check
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Update Packages
-              run: sudo apt update
-
-            - name: Install Valgrind
-              run: sudo apt install -y valgrind
-
-            - name: Generate Tests Build File
-              run: cmake . -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
-
-            - name: Build Unit Tests
               run: cmake --build build
-
-            - name: Run Unit Tests with Valgrind
-              run: valgrind --leak-check=full --show-leak-kinds=all --error-exitcode=1 ./QTranslatorTests
