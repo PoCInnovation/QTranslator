@@ -1,6 +1,14 @@
 
 #include "parser.hpp"
 
+#if defined(_WIN32) || defined(_WIN64)
+#define POPEN(cmd, mode) _popen(cmd, mode)
+#define PCLOSE(pipe) _pclose(pipe)
+#else
+#define POPEN(cmd, mode) popen(cmd, mode)
+#define PCLOSE(pipe) pclose(pipe)
+#endif
+
 template<typename Map> typename Map::const_iterator
 static find_prefix(Map const& map, typename Map::key_type const& key)
 {
@@ -12,13 +20,12 @@ static find_prefix(Map const& map, typename Map::key_type const& key)
     }
     return map.end(); // map contains no prefix
 }
-#include <unistd.h>
-#include <stdio.h>
+
 std::vector<std::string> parser::parceBinary(std::string filepath)
 {
     std::string cmd = ("objdump -d " + filepath  + " | awk -v RS= '/^[[:xdigit:]]+ <main>/'");
     char buf[BUFSIZ];
-    FILE *ptr = popen(cmd.c_str(), "r");
+    FILE *ptr = POPEN(cmd.c_str(), "r");
     std::vector<std::string> cmdAsm;
     std::string temp;
     int i = 0;
@@ -31,7 +38,7 @@ std::vector<std::string> parser::parceBinary(std::string filepath)
         cmdAsm.push_back(temp);
         i++;
     }
-    pclose(ptr);
+    PCLOSE(ptr);
     return cmdAsm;
 }
 
