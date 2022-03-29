@@ -1,14 +1,15 @@
 # QTranslator
 
 ## :speech_balloon: Desciption
-Transforms an .asm file into QASM. The goal is to create a quantum calculator.
+The goal of this project is to transpile an assembly file (.asm) into a quantum assembly file (.qasm).  
+The goal of the initial proof of concept was to create a quantum calculator.
 
 ## :computer: Install
 
 ### :rocket: Clone repository
 
-```shell
-git@github.com:PoCInnovation/QTranslator.git
+```sh
+git clone git@github.com:PoCInnovation/QTranslator.git
 ```
 
 ### :warning: Requirement

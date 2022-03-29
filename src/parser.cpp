@@ -1,23 +1,61 @@
+
 #include "parser.hpp"
-#include "exception.hpp"
 
-namespace parser {
+#if defined(_WIN32) || defined(_WIN64)
+#define POPEN(cmd, mode) _popen(cmd, mode)
+#define PCLOSE(pipe) _pclose(pipe)
+#else
+#define POPEN(cmd, mode) popen(cmd, mode)
+#define PCLOSE(pipe) pclose(pipe)
+#endif
 
-std::map<std::string, size_t> tags_table;
-
-std::string action_new_tag(std::string tag_name, size_t line)
+template<typename Map> typename Map::const_iterator
+static find_prefix(Map const& map, typename Map::key_type const& key)
 {
-    tag_name.pop_back();
-    if (tags_table.contains(tag_name))
-        throw transpiler::exception(0, "multiple definition of tag ", tag_name, ". It was alredy created line ", tags_table[tag_name]);
-    tags_table[tag_name] = line;
-    return tag_name + ":";
+    typename Map::const_iterator it = map.upper_bound(key);
+    while (it != map.begin()) {
+        --it;
+        if(key.substr(0, it->first.size()) == it->first)
+            return it;
+    }
+    return map.end(); // map contains no prefix
 }
 
-std::string action_ret(const std::vector<std::string> &line)
+std::vector<std::string> parser::parceBinary(std::string filepath)
 {
-    if (line.size() != 1)
-        throw transpiler::exception(1, line.front(), "(...) expected no arguments but ", std::to_string(line.size() - 1), " were provided");
-    return "return";
+    std::string cmd = ("objdump -d " + filepath  + " | awk -v RS= '/^[[:xdigit:]]+ <main>/'");
+    char buf[BUFSIZ];
+    FILE *ptr = POPEN(cmd.c_str(), "r");
+    std::vector<std::string> cmdAsm;
+    std::string temp;
+    int i = 0;
+
+    fgets(buf, BUFSIZ, ptr);
+    while (fgets(buf, BUFSIZ, ptr) != NULL) {
+        temp = buf;
+        if (temp[temp.size() - 1] == '\n')
+            temp.pop_back();
+        cmdAsm.push_back(temp);
+        i++;
+    }
+    PCLOSE(ptr);
+    return cmdAsm;
 }
+
+std::vector<Instruction*> parser::parceAsm(std::vector<std::string> cmdAsm)
+{
+    std::vector<Instruction*> instructionsList;
+    std::string temp;
+    std::vector<std::string> tempCmd;
+
+    for (auto line : cmdAsm) {
+        if (line.size() > 32) {
+            temp = line.substr(32).c_str();
+            tempCmd = tools::string_to_vector(temp, ' ', false);
+            auto t = find_prefix(parser::IntructionsTab, tempCmd[0]);
+            if (t != parser::IntructionsTab.end())
+                instructionsList.push_back((*t).second(tools::string_to_vector(tempCmd[1], ',', false)));
+        }
+    }
+    return instructionsList;
 }
