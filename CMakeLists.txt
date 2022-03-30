@@ -37,15 +37,17 @@ else()
     add_compile_options(/W4)
 endif()
 
-add_executable(${BIN}
-    ${SOURCES}
-)
+add_executable(${BIN} ${SOURCES})
 
 target_include_directories(${BIN} PRIVATE
     include
     include/intructions
     include/Qasm
 )
+
+if(UNIX)
+    target_link_libraries(${BIN} PRIVATE dl)
+endif()
 
 file(GLOB instructions CONFIGURE_DEPENDS "src/instructions/*.cpp")
 foreach(instruction ${instructions})
