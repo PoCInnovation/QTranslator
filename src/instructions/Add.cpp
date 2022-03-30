@@ -5,7 +5,10 @@
 ** Add
 */
 
-#include "Add.hpp"
+#include "dylib.hpp"
+
+#include "Instruction.hpp"
+#include <vector>
 #include <iostream>
 #include <math.h>
 
@@ -41,10 +44,21 @@ static void uniAdd(QRegister &qreg1, QRegister &qreg2, std::string arg)
     opAdd(qreg2, qreg1);
 }
 
-void Add::run(Circuit &circ)
+class Add : public Instruction {
+    public:
+        Add(const std::vector<std::string> args): _args(args) {};
+        const char *getName() const override { return "add"; }
+        void run(Circuit &circ) override {
+            if (_args[0][0] == '$') {
+                uniAdd(*circ.getReg("add"), *circ.getReg(_args[1]), _args[0]);
+            } else
+                opAdd(*circ.getReg(_args[1]), *circ.getReg(_args[0]));
+        }
+    private:
+        std::vector<std::string> _args;
+};
+
+DYLIB_API Instruction *get_instruction(std::vector<std::string> args)
 {
-    if (_args[0][0] == '$') {
-        uniAdd(*circ.getReg("add"), *circ.getReg(_args[1]), _args[0]);
-    } else
-        opAdd(*circ.getReg(_args[1]), *circ.getReg(_args[0]));
+    return new Add(args);
 }

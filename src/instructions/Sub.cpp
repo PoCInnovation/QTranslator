@@ -5,8 +5,12 @@
 ** Sub
 */
 
-#include "Sub.hpp"
+#include "dylib.hpp"
+
+#include "Instruction.hpp"
+
 #include <math.h>
+#include <vector>
 
 static void createInputState(QRegister &reg, size_t n)
 {
@@ -51,10 +55,21 @@ static void uniSub(QRegister &qreg1, QRegister &qreg2, std::string arg)
     doSub(qreg2, qreg1);
 }
 
-void Sub::run(Circuit &circ)
+class Sub : public Instruction {
+    public:
+        Sub(const std::vector<std::string>args): _args(args) {};
+        const char *getName() const override { return "sub"; }
+        void run(Circuit &circ) override {
+            if (_args[0][0] == '$') {
+                uniSub(*circ.getReg("add"), *circ.getReg(_args[1]), _args[0]);
+            } else
+                doSub(*circ.getReg(_args[1]), *circ.getReg(_args[0]));
+            }
+    private:
+        std::vector<std::string> _args;
+};
+
+DYLIB_API Instruction *get_instruction(std::vector<std::string> args)
 {
-    if (_args[0][0] == '$') {
-        uniSub(*circ.getReg("add"), *circ.getReg(_args[1]), _args[0]);
-    } else
-        doSub(*circ.getReg(_args[1]), *circ.getReg(_args[0]));
+    return new Sub(args);
 }

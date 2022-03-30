@@ -5,9 +5,12 @@
 ** Shl
 */
 
-#include "Shl.hpp"
+#include "dylib.hpp"
 
-void shiftLeft(Circuit &circ, size_t nbtime, const std::string &reg_name)
+#include "Instruction.hpp"
+#include <vector>
+
+static void shiftLeft(Circuit &circ, size_t nbtime, const std::string &reg_name)
 {
     QRegister *reg = circ.getReg(reg_name);
     QRegister *reg_add = circ.getReg("add");
@@ -20,10 +23,21 @@ void shiftLeft(Circuit &circ, size_t nbtime, const std::string &reg_name)
     }
 }
 
-void Shl::run(Circuit &circ)
+class Shl : public Instruction {
+    public:
+        Shl(const std::vector<std::string>args): _args(args) {};
+        const char *getName() const override { return "shl"; }
+        void run(Circuit &circ) override {
+            if (_args[0][0] == '$') {
+                shiftLeft(circ, std::stoul(_args[0].substr(1), nullptr, 16), _args[1]);
+            } else
+                shiftLeft(circ, 1, _args[1]);
+        }
+    private:
+        std::vector<std::string> _args;
+};
+
+DYLIB_API Instruction *get_instruction(std::vector<std::string> args)
 {
-    if (_args[0][0] == '$') {
-        shiftLeft(circ, std::stoul(_args[0].substr(1), nullptr, 16), _args[1]);
-    } else
-        shiftLeft(circ, 1, _args[1]);
+    return new Shl(args);
 }

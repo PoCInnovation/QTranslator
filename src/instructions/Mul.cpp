@@ -5,9 +5,10 @@
 ** Mul
 */
 
-#include "Mul.hpp"
-#include "Add.hpp"
-#include "Move.hpp"
+#include "dylib.hpp"
+
+#include "Instruction.hpp"
+#include <vector>
 #include <math.h>
 
 static void executeQFT(QRegister &reg, size_t n)
@@ -35,20 +36,31 @@ static void inverseQFT(QRegister &reg, size_t n)
     reg.h(n);
 }
 
+class Mul : public Instruction {
 
-void Mul::run(Circuit &circ)
+    public:
+        Mul(const std::vector<std::string>args): _args(args) {};
+        const char *getName() const override { return "mul"; }
+        void run(Circuit &circ) override {
+            QRegister &reg_1 = *circ.getReg(_args[0]);
+            QRegister &reg_2 = *circ.getReg(_args[1]);
+            size_t size = reg_2.getSize() - 1;
+            size_t nb = reg_2.getValue();
+
+            reg_2.reset();
+            for (size_t i = 0; i <= size; i++)
+                executeQFT(reg_2, size - i);
+            for (size_t j = 0; j < nb; j++)
+                for (size_t i = 0; i <= size; i++)
+                    evolveQFTStateSum(reg_2, reg_1, size - i);
+            for (size_t i = 0; i <= size; i++)
+            inverseQFT(reg_2, i);
+        }
+    private:
+        std::vector<std::string> _args;
+};
+
+DYLIB_API Instruction *get_instruction(std::vector<std::string> args)
 {
-    QRegister &reg_1 = *circ.getReg(_args[0]);
-    QRegister &reg_2 = *circ.getReg(_args[1]);
-    size_t size = reg_2.getSize() - 1;
-    size_t nb = reg_2.getValue();
-
-    reg_2.reset();
-    for (size_t i = 0; i <= size; i++)
-        executeQFT(reg_2, size - i);
-    for (size_t j = 0; j < nb; j++)
-        for (size_t i = 0; i <= size; i++)
-            evolveQFTStateSum(reg_2, reg_1, size - i);
-    for (size_t i = 0; i <= size; i++)
-        inverseQFT(reg_2, i);
+    return new Mul(args);
 }

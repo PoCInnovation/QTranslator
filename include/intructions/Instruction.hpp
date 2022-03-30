@@ -13,6 +13,7 @@
 class Instruction {
     public:
         virtual ~Instruction() {};
+        virtual const char *getName() const = 0;
         virtual void run(Circuit &circ) = 0;
 };
 
