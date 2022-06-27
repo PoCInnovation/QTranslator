@@ -13,8 +13,8 @@
 
 class QRegister {
     public:
-        QRegister(int value = 0);
-        QRegister(const QRegister &other);
+        QRegister(int value, const size_t id);
+        QRegister(const QRegister &other, const size_t id);
         ~QRegister();
 
         // utils

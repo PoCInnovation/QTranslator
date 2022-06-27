@@ -34,6 +34,7 @@ class Circuit {
         std::ostringstream _coutBuffer;
         std::unique_ptr<std::streambuf> _oldBuffer;
         std::map<std::string, QRegister*> _regs;
+        size_t _nb;
 };
 
 #endif /* !CIRCUIT_HPP_ */

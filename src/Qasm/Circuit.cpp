@@ -7,7 +7,7 @@
 
 #include "Circuit.hpp"
 
-Circuit::Circuit(): _header(""), _coutBuffer(), _oldBuffer(nullptr), _regs()
+Circuit::Circuit(): _header(""), _coutBuffer(), _oldBuffer(nullptr), _regs(), _nb(0)
 {
     _header.append("OPENQASM 2.0;\n");
     _header.append("include \"qelib1.inc\";\n");
@@ -61,16 +61,18 @@ QRegister *Circuit::getReg(const std::string &regKey)
 
 QRegister *Circuit::addReg(const std::string &regKey, int value)
 {
-    QRegister *temp = new QRegister(value);
+    QRegister *temp = new QRegister(value, _nb);
 
+    _nb++;
     _regs[regKey] = temp;
     return temp;
 }
 
 QRegister *Circuit::addReg(const std::string &regKey, QRegister &other)
 {
-    QRegister *temp = new QRegister(other);
+    QRegister *temp = new QRegister(other, _nb);
 
+    _nb++;
     _regs[regKey] = temp;
     return temp;
 }

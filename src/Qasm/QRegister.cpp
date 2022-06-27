@@ -8,12 +8,6 @@
 #include "QRegister.hpp"
 #include "bitset"
 
-static size_t getQnumber()
-{
-    static size_t QregNumber = 0;
-    return QregNumber++;
-}
-
 void QRegister::fillQRegister(int value)
 {
     size_t index = 0;
@@ -34,12 +28,12 @@ void QRegister::reset()
     std::cout << __func__ << " " << _name << ";" << std::endl;
 }
 
-QRegister::QRegister(int value): _name("q" + std::to_string(getQnumber())), _size(0), _value(0)
+QRegister::QRegister(int value, const size_t id): _name("q" + std::to_string(id)), _size(0), _value(0)
 {
     this->fillQRegister(value);
 }
 
-QRegister::QRegister(const QRegister &other): _name("q" + std::to_string(getQnumber())), _size(other._size), _value(other.getValue())
+QRegister::QRegister(const QRegister &other, const size_t id): _name("q" + std::to_string(id)), _size(other._size), _value(other.getValue())
 {
     cx(other);
 }
