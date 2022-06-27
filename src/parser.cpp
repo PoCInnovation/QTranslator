@@ -1,4 +1,5 @@
 
+#include <filesystem>
 #include "parser.hpp"
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -42,11 +43,32 @@ std::vector<std::string> parser::parceBinary(std::string filepath)
     return cmdAsm;
 }
 
+void load_instructions()
+{
+    for (auto &file : std::filesystem::recursive_directory_iterator("./instructions")) {
+        if (file.path().extension() == dylib::extension) {
+            try {
+                dylib lib(file.path().string());
+                auto fn = lib.get_function<Instruction *(std::vector<std::string>)>("get_instruction");
+                std::unique_ptr<Instruction> mod(fn(std::vector<std::string>()));
+                parser::IntructionsTab[mod->getName()] = fn;
+                parser::dynamic_libs.push_back(std::move(lib));
+            } catch (const dylib::handle_error &) {
+                std::cerr << "Failed to load lib: " << file.path().string() << std::endl;
+            } catch (const dylib::symbol_error &) {
+                std::cerr << "Failed to load symbol \"get_instruction\" on lib: " << file.path().string() << std::endl;
+            }
+        }
+    }
+}
+
 std::vector<Instruction*> parser::parceAsm(std::vector<std::string> cmdAsm)
 {
     std::vector<Instruction*> instructionsList;
     std::string temp;
     std::vector<std::string> tempCmd;
+
+    load_instructions();
 
     for (auto line : cmdAsm) {
         if (line.size() > 32) {

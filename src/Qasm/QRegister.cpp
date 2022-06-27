@@ -8,12 +8,6 @@
 #include "QRegister.hpp"
 #include "bitset"
 
-static size_t getQnumber()
-{
-    static size_t QregNumber = 0;
-    return QregNumber++;
-}
-
 void QRegister::fillQRegister(int value)
 {
     size_t index = 0;
@@ -34,12 +28,12 @@ void QRegister::reset()
     std::cout << __func__ << " " << _name << ";" << std::endl;
 }
 
-QRegister::QRegister(int value): _name("q" + std::to_string(getQnumber())), _size(0), _value(0)
+QRegister::QRegister(int value, const size_t id): _name("q" + std::to_string(id)), _size(0), _value(0), _cxHistory()
 {
     this->fillQRegister(value);
 }
 
-QRegister::QRegister(const QRegister &other): _name("q" + std::to_string(getQnumber())), _size(other._size), _value(other.getValue())
+QRegister::QRegister(const QRegister &other, const size_t id): _name("q" + std::to_string(id)), _size(other._size), _value(other.getValue()),  _cxHistory()
 {
     cx(other);
 }
@@ -87,8 +81,16 @@ void QRegister::x(size_t index)
 
 void QRegister::cx(const QRegister &other)
 {
+    _cxHistory.push(other.getName());
     std::cout << __func__ << " ";
     std::cout << other.getName() << "," << this->getName() << ";" << std::endl;
+}
+
+void QRegister::revertLastCx(void)
+{
+    std::cout << "cx" << " ";
+    std::cout << _cxHistory.top() << "," << this->getName() << ";" << std::endl;
+    _cxHistory.pop();
 }
 
 void QRegister::cx(size_t index, const QRegister &other)
