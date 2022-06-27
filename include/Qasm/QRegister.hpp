@@ -10,6 +10,7 @@
 
 #include <string>
 #include <iostream>
+#include <stack>
 
 class QRegister {
     public:
@@ -32,6 +33,7 @@ class QRegister {
         void x();
         void x(size_t index);
         void cx(const QRegister &other);
+        void revertLastCx(void);
         void cx(size_t index, const QRegister &other);
         void cx(size_t curindex, size_t index, const QRegister &other);
         void h();
@@ -45,6 +47,7 @@ class QRegister {
         std::string _name;
         size_t _size;
         size_t _value;
+        std::stack<std::string> _cxHistory;
 };
 
 #endif /* !QREGISTER_HPP_ */

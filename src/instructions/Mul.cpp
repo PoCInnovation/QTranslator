@@ -47,14 +47,14 @@ class Mul : public Instruction {
             size_t size = reg_2.getSize() - 1;
             size_t nb = reg_2.getValue();
 
-            reg_2.reset();
+            reg_2.revertLastCx();
             for (size_t i = 0; i <= size; i++)
                 executeQFT(reg_2, size - i);
             for (size_t j = 0; j < nb; j++)
                 for (size_t i = 0; i <= size; i++)
                     evolveQFTStateSum(reg_2, reg_1, size - i);
             for (size_t i = 0; i <= size; i++)
-            inverseQFT(reg_2, i);
+                inverseQFT(reg_2, i);
         }
     private:
         std::vector<std::string> _args;
