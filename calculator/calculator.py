@@ -26,7 +26,7 @@ else:
 
 
 if (backend == 'ibm'):
-    output = ibm_exec(circuit.circ)
+    output = ibm_exec(circuit.circ, send_to_ibm=True)
 else:
     output = simulator(circuit.circ)
 

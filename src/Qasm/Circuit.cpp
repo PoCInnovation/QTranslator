@@ -6,6 +6,7 @@
 */
 
 #include "Circuit.hpp"
+#include <fstream>
 
 Circuit::Circuit(): _header(""), _coutBuffer(), _oldBuffer(nullptr), _regs(), _nb(0)
 {
@@ -42,6 +43,28 @@ void Circuit::draw(void)
     std::cout << _coutBuffer.str();
     _oldBuffer.release();
     _oldBuffer.reset(nullptr);
+}
+
+void Circuit::draw(const std::string &filePath)
+{
+    std::ofstream myfile(filePath);
+
+    if (_oldBuffer == nullptr || !myfile.is_open())
+        return;
+    // Set Cout to terminal
+    std::cout.rdbuf(_oldBuffer.get());
+    // include
+    myfile << _header;
+    // QuantumReg
+    for (const auto &t : _regs)
+        myfile << "qreg " << t.second->qRegAt(t.second->getSize()) + ";" << std::endl;
+    // ClassicalReg of output
+     myfile << "creg " << "c0[9];" << std::endl;
+    // Qasm
+    myfile << _coutBuffer.str();
+    _oldBuffer.release();
+    _oldBuffer.reset(nullptr);
+    myfile.close();
 }
 
 const std::ostringstream &Circuit::getBuffer(void) const

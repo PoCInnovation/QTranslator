@@ -38,6 +38,10 @@ class Circuit {
          * @brief Dump the Quantum Circuit on the standart output
         */
         void draw(void);
+        /**
+         * @brief Dump the Quantum Circuit in a file
+        */
+        void draw(const std::string &filePath);
 
         /**
          * @brief Get the redirected buffer of cout

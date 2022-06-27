@@ -13,6 +13,8 @@ class qtranslator
 private:
     std::string m_in = "";
     std::string m_out = "out.qasm";
+    bool _execute = false;
+    bool _execute_ibm = false;
     std::vector<std::string> m_in_content{};
     std::vector<std::string> m_out_content{};
     std::vector<std::string> _cmdAsm{};

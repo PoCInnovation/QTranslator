@@ -27,6 +27,8 @@ void qtranslator::help(const char *bin, int return_val)
     std::cout << "OPTIONS:\n";
     std::cout << "\t-h --help\tDisplay this help menu\n";
     std::cout << "\t-o --output\tName of the generated QASM file\n";
+    std::cout << "\t-e --execute\tThe Qasm will be directly executed\n";
+    std::cout << "\t--execute-ibm\tThe Qasm will be directly executed on IBM Quantum backends\n";
 
     std::cout << "RETURN VALUE:\n";
     std::cout << "\t0\t\tif transpilation succeed\n";
@@ -53,6 +55,10 @@ void qtranslator::parse_args(int ac, char const *av[])
                 format::bold, arg, " parameter needs to be specified", format::reset);
             m_out = av[i + 1];
             i += 1;
+        } else if (arg == "-e" or arg == "--execute") {
+            _execute = true;
+        } else if (arg == "--execute-ibm") {
+            _execute_ibm = true;
         }
     }
 }
@@ -76,6 +82,18 @@ void qtranslator::parse_file()
     _instructionsList = parser::parceAsm(_cmdAsm);
 }
 
+static void execute_qadm_file(const bool ibm)
+{
+    char str[PATH_MAX];
+    FILE* fd = popen(ibm ? "python calculator/runQasm.py out.qasm ibm" : "python calculator/runQasm.py out.qasm", "r");
+
+    if (ibm)
+        std::cout << "Circuit sent to Ibm" << std::endl;
+    fgets(str, PATH_MAX, fd);
+    printf("%s\n", str);
+    pclose(fd);
+}
+
 void qtranslator::write_to_qasm()
 {
     _circ.addReg("add", 0);
@@ -87,5 +105,13 @@ void qtranslator::write_to_qasm()
         t->run(_circ);
 
     _circ.getReg("%eax")->measure();
-    _circ.draw();
+    if (m_out != "")
+        _circ.draw(m_out);
+    else
+        _circ.draw();
+    if (_execute)
+        execute_qadm_file(false);
+    else if (_execute_ibm) {
+        execute_qadm_file(true);
+    }
 }
