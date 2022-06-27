@@ -13,7 +13,7 @@
 class Div : public Instruction {
     public:
         Div(const std::vector<std::string>args): _args(args) {};
-        const char *getName() const override { return "div"; }
+        const char *getName() const override { return "idiv"; }
         void run(Circuit &circ) override {
             QRegister &reg_1 = *circ.getReg("%eax");
             QRegister &reg_2 = *circ.getReg(_args[0]);

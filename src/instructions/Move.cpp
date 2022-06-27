@@ -14,7 +14,7 @@
 class Move : public Instruction {
     public:
         Move(const std::vector<std::string>args): _args(args) {};
-        const char *getName() const override { return "move"; }
+        const char *getName() const override { return "mov"; }
         void run(Circuit &circ) override {
             if (_args[0][0] == '$')
                 movValue(circ);

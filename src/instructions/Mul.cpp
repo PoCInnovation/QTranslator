@@ -40,7 +40,7 @@ class Mul : public Instruction {
 
     public:
         Mul(const std::vector<std::string>args): _args(args) {};
-        const char *getName() const override { return "mul"; }
+        const char *getName() const override { return "imul"; }
         void run(Circuit &circ) override {
             QRegister &reg_1 = *circ.getReg(_args[0]);
             QRegister &reg_2 = *circ.getReg(_args[1]);
